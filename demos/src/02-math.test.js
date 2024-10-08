@@ -28,3 +28,9 @@ test('the average 1, 2, 3, 4, 5 should be 3', () => {
   const rta = average(1, 2, 3, 4, 5);
   expect(rta).toBe(3);
 });
+
+// The function should handle different unexpected params type
+test('the average 1, "a", 3, 4, 5 should be 3.25', () => {
+  const rta = average(1, "a", 3, 4, 5);
+  expect(rta).toBe(3.25);
+});

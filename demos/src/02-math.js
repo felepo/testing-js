@@ -12,11 +12,16 @@ function divide(a, b) {
 }
 
 function average(...numbers) {
-  const lenghtNumbers = numbers.length;
+  let lenghtNumbers = numbers.length;
   let sumNumbers = 0;
   let averageResult = 0;
 
   for(let num of numbers) {
+    // Handling the wrong type of num
+    if(typeof num !== "number") {
+      lenghtNumbers--;
+      continue;
+    }
     sumNumbers += num;
   }
   averageResult = sumNumbers / lenghtNumbers;
