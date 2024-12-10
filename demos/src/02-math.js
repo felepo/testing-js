@@ -7,24 +7,14 @@ function multiply(a, b) {
 }
 
 function divide(a, b) {
-  if (b === 0 ) return null;
+  if (b === 0) return null;
   return a / b;
 }
 
 function average(...numbers) {
-  let lenghtNumbers = numbers.length;
-  let sumNumbers = 0;
-  let averageResult = 0;
-
-  for(let num of numbers) {
-    // Handling the wrong type of num
-    if(typeof num !== "number") {
-      lenghtNumbers--;
-      continue;
-    }
-    sumNumbers += num;
-  }
-  averageResult = sumNumbers / lenghtNumbers;
+  const validNumbers = numbers.filter((num) => typeof num === 'number');
+  const sumNumbers = validNumbers.reduce((acc, num) => acc + num, 0);
+  const averageResult = sumNumbers / validNumbers.length;
 
   return averageResult;
 }
@@ -33,5 +23,5 @@ module.exports = {
   sum,
   multiply,
   divide,
-  average
+  average,
 };
