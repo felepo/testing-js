@@ -25,13 +25,29 @@ const fakeBooks = [
 ];
 
 // Stub
-const MongoLibStub = {
-  getAll: () => [...fakeBooks],
-  create: () => {},
-};
+// THIS IS USED WITH FAKE DATA
+// const MongoLibStub = {
+//   getAll: () => [...fakeBooks],
+//   create: () => {},
+// };
+
+// THIS IS USED WITH SPIES
+const mockSpyGetAll = jest.fn();
+
+// WE DON'T USE THIS BECAUSE WE NEED TO USE MOCKS IN ANOTHER FILE
+// const MongoLibStub = {
+//   getAll: mockSpyGetAll,
+//   create: () => {},
+// };
 
 // Mock
-jest.mock('../lib/mongo.lib', () => jest.fn().mockImplementation(() => MongoLibStub));
+// THIS IS THE SAME AS THE STUB BUT WE USE MOCKS IN ANOTHER FILE
+// jest.mock('../lib/mongo.lib', () => jest.fn().mockImplementation(() => MongoLibStub));
+
+jest.mock('../lib/mongo.lib', () => jest.fn().mockImplementation(() => ({
+  getAll: mockSpyGetAll,
+  create: () => {},
+})));
 
 describe('Test for BooksService', () => {
   let service;
@@ -44,11 +60,32 @@ describe('Test for BooksService', () => {
   describe('Test for getBooks method', () => {
     test('Should return a list of books', async () => {
       // Arrange
+      mockSpyGetAll.mockResolvedValue(fakeBooks);
       // Act
       const books = await service.getBooks({});
       console.log(books);
       // Assert
       expect(books.length).toEqual(5);
+      expect(mockSpyGetAll).toHaveBeenCalled();
+      expect(mockSpyGetAll).toHaveBeenCalledTimes(1);
+      expect(mockSpyGetAll).toHaveBeenCalledWith('books', {});
+    });
+
+    test('Should return a specific book', async () => {
+      // Arrange
+      mockSpyGetAll.mockResolvedValue([
+        {
+          id: '2',
+          title: 'The Hobbit',
+        },
+      ]);
+      // Act
+      const books = await service.getBooks({});
+      console.log(books);
+      // Assert
+      expect(books[0].title).toEqual('The Hobbit');
+      expect(mockSpyGetAll).toHaveBeenCalled();
+      expect(mockSpyGetAll).toHaveBeenCalledTimes(1);
     });
   });
 });
