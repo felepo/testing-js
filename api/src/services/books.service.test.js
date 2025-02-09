@@ -75,8 +75,8 @@ describe('Test for BooksService', () => {
       // Arrange
       mockSpyGetAll.mockResolvedValue([
         {
-          id: '2',
-          title: 'The Hobbit',
+          id: '1',
+          title: 'The Lord of the Rings',
         },
       ]);
       // Act
