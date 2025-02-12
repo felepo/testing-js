@@ -1,28 +1,14 @@
 const BooksService = require('./books.service');
+const { generateManyBooks, generateOneBook } = require('../fakes/book.fake');
 
 // Faker
-const fakeBooks = [
-  {
-    id: '1',
-    title: 'The Lord of the Rings',
-  },
-  {
-    id: '2',
-    title: 'The Hobbit',
-  },
-  {
-    id: '3',
-    title: 'The Silmarillion',
-  },
-  {
-    id: '4',
-    title: 'Unfinished Tales',
-  },
-  {
-    id: '5',
-    title: 'The Children of Húrin',
-  },
-];
+// THIS IS REPLACED FOR THE FAKER BOOKS
+// const fakeBooks = [
+//   {
+//     id: '1',
+//     title: 'The Lord of the Rings',
+//   },
+// ];
 
 // Stub
 // THIS IS USED WITH FAKE DATA
@@ -60,12 +46,13 @@ describe('Test for BooksService', () => {
   describe('Test for getBooks method', () => {
     test('Should return a list of books', async () => {
       // Arrange
+      const fakeBooks = generateManyBooks(20);
       mockSpyGetAll.mockResolvedValue(fakeBooks);
       // Act
       const books = await service.getBooks({});
       console.log(books);
       // Assert
-      expect(books.length).toEqual(5);
+      expect(books.length).toEqual(fakeBooks.length);
       expect(mockSpyGetAll).toHaveBeenCalled();
       expect(mockSpyGetAll).toHaveBeenCalledTimes(1);
       expect(mockSpyGetAll).toHaveBeenCalledWith('books', {});
@@ -73,17 +60,15 @@ describe('Test for BooksService', () => {
 
     test('Should return a specific book', async () => {
       // Arrange
-      mockSpyGetAll.mockResolvedValue([
-        {
-          id: '1',
-          title: 'The Lord of the Rings',
-        },
-      ]);
+      const fakeBook = generateOneBook();
+      mockSpyGetAll.mockResolvedValue(fakeBook);
       // Act
       const books = await service.getBooks({});
       console.log(books);
       // Assert
-      expect(books[0].title).toEqual('The Hobbit');
+      expect(books).not.toBeFalsy();
+      expect(books).not.toBeUndefined();
+      expect(books.title).toEqual(fakeBook.title);
       expect(mockSpyGetAll).toHaveBeenCalled();
       expect(mockSpyGetAll).toHaveBeenCalledTimes(1);
     });
